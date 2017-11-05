@@ -1,9 +1,12 @@
-import components.{HomeComponent, LoginComponent, NotFoundComponent}
-import japgolly.scalajs.react.{Callback, CallbackTo}
+package protors
+
+
+import japgolly.scalajs.react.CallbackTo
 import japgolly.scalajs.react.extra.router._
 import japgolly.scalajs.react.vdom.Implicits._
+import protors.components.{HomeComponent, Layout, LoginComponent, NotFoundComponent}
 
-object RouterConfig {
+object RoutesCfg {
 
   sealed trait Page
 
@@ -20,6 +23,8 @@ object RouterConfig {
 
     val cb = CallbackTo.pure(false)
 
+    val proxy = AppCircuit.connect(_.user)
+
     val privateRoutes =
       ( emptyRule
       | staticRoute(root, HomePage) ~> render(HomeComponent()))
@@ -27,7 +32,7 @@ object RouterConfig {
 
     (privateRoutes
       | staticRoute("#woop", NotFoundPage) ~> render(NotFoundComponent.component())
-      | staticRoute("#login", LoginPage) ~> render(LoginComponent())
+      | staticRoute("#login", LoginPage) ~> renderR(r => proxy( p => LoginComponent(p)))
     ).notFound(redirectToPage(NotFoundPage)(Redirect.Replace))
       .verify(HomePage, LoginPage, NotFoundPage)
       .renderWith(Layout.render)

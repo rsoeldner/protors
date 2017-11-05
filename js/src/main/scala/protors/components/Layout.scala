@@ -1,7 +1,9 @@
-import RouterConfig.Page
-import japgolly.scalajs.react.extra.router.{Resolution, RouterCtl}
+package protors.components
+
 import japgolly.scalajs.react._
-import vdom.html_<^._
+import japgolly.scalajs.react.extra.router.{Resolution, RouterCtl}
+import japgolly.scalajs.react.vdom.html_<^._
+import protors.RoutesCfg.Page
 
 object Layout {
 
