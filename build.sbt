@@ -1,18 +1,17 @@
-
 lazy val jvmDeps = {
   val http4sVersion = "0.18.0-SNAPSHOT"
-  val catsVersion = "1.0.0-RC1"
-  val circeVersion = "0.9.0-M2"
+  val catsVersion   = "1.0.0-RC1"
+  val circeVersion  = "0.9.0-M2"
 
   Seq(
-    "org.http4s" %% "http4s-dsl" % http4sVersion,
-    "org.http4s" %% "http4s-blaze-server" % http4sVersion,
-    "org.typelevel" %% "cats-core" % catsVersion,
-    "org.typelevel" %% "cats-effect" % "0.5",
-    "co.fs2" %% "fs2-core" % "0.10.0-M8",
-    "io.circe" %% "circe-core" % circeVersion,
-    "io.circe" %% "circe-generic" % circeVersion,
-    "io.circe" %% "circe-parser" % circeVersion
+    "org.http4s"    %% "http4s-dsl"          % http4sVersion,
+    "org.http4s"    %% "http4s-blaze-server" % http4sVersion,
+    "org.typelevel" %% "cats-core"           % catsVersion,
+    "org.typelevel" %% "cats-effect"         % "0.5",
+    "co.fs2"        %% "fs2-core"            % "0.10.0-M8",
+    "io.circe"      %% "circe-core"          % circeVersion,
+    "io.circe"      %% "circe-generic"       % circeVersion,
+    "io.circe"      %% "circe-parser"        % circeVersion
   )
 }
 
@@ -26,45 +25,50 @@ lazy val jvmOps = Seq(
   "-language:implicitConversions"
 )
 
-
-lazy val root = project.in(file("."))
+lazy val root = project
+  .in(file("."))
   .aggregate(frontend, backend)
-    .settings(
+  .settings(
     publish := {},
     publishLocal := {}
   )
 
-lazy val seed = crossProject.in(file(".")).
-  settings(
+lazy val seed = crossProject
+  .in(file("."))
+  .settings(
     name := "foo",
     version := "0.1-SNAPSHOT"
-  ).
-  jvmSettings(
+  )
+  .jvmSettings(
     resolvers += Resolver.sonatypeRepo("snapshots"),
     scalacOptions := jvmOps,
     libraryDependencies := jvmDeps
-  ).
-  jsSettings(
+  )
+  .jsSettings(
     scalaJSUseMainModuleInitializer := true,
-    libraryDependencies += "com.github.japgolly.scalajs-react" %%% "core" % "1.1.1",
+    libraryDependencies ++= Seq(
+      "com.github.japgolly.scalajs-react" %%% "core"        % "1.1.1",
+      "com.github.japgolly.scalajs-react" %%% "extra"       % "1.1.1",
+      "io.suzaku"                         %%% "diode"       % "1.1.2",
+      "io.suzaku"                         %%% "diode-react" % "1.1.2"
+    ),
     jsDependencies ++= Seq(
       "org.webjars.bower" % "react" % "15.6.1"
-        /        "react-with-addons.js"
+        / "react-with-addons.js"
         minified "react-with-addons.min.js"
         commonJSName "React",
-
       "org.webjars.bower" % "react" % "15.6.1"
-        /         "react-dom.js"
-        minified  "react-dom.min.js"
+        / "react-dom.js"
+        minified "react-dom.min.js"
         dependsOn "react-with-addons.js"
         commonJSName "ReactDOM",
-
       "org.webjars.bower" % "react" % "15.6.1"
-        /         "react-dom-server.js"
-        minified  "react-dom-server.min.js"
+        / "react-dom-server.js"
+        minified "react-dom-server.min.js"
         dependsOn "react-dom.js"
-        commonJSName "ReactDOMServer")
-)
+        commonJSName "ReactDOMServer"
+    )
+  )
 
 lazy val backend = seed.jvm
 
