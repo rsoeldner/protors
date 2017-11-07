@@ -41,7 +41,7 @@ object LoginComponent {
             <.label(^.`for` :="exampleInputPassword1", "Password"),
             <.input(^.`type` :="password", ^.cls := "form-control", ^.id :="exampleInputPassword1", ^.placeholder :="Password")
           ),
-            <.button( ^.`type` :="submit", ^.cls :="btn btn-primary", "Submit")
+            <.button( ^.`type` :="submit", ^.cls :="btn btn-primary", "Submit", ^.onClick --> submit)
       ))
     .build
 
