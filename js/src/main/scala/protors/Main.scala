@@ -1,5 +1,6 @@
 package protors
 
+import diode.react.ModelProxy
 import japgolly.scalajs.react.extra.router._
 import japgolly.scalajs.react.vdom.Implicits._
 import japgolly.scalajs.react.vdom.html_<^.{<, ^}
@@ -18,7 +19,7 @@ object Main {
 
       val proxy = AppCircuit.connect(_.user)
       <.div(^.cls :="container",
-        NavBar(c),
+        proxy((p: ModelProxy[User]) => NavBar(c, p)),
         <.div(^.cls := "container", r.render())
       )
     }
@@ -27,7 +28,8 @@ object Main {
       import dsl._
 
       (emptyRule
-        | staticRoute(root, HomePage) ~> render(HomeComponent()))
+        | staticRoute(root, HomePage) ~> render(HomeComponent())
+        | staticRoute("#login", LoginPage) ~> render(LoginComponent()))
         .notFound(redirectToPage(HomePage)(Redirect.Replace))
         .renderWith(layout)
     }
