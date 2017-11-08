@@ -2,16 +2,19 @@ lazy val jvmDeps = {
   val http4sVersion = "0.18.0-SNAPSHOT"
   val catsVersion   = "1.0.0-RC1"
   val circeVersion  = "0.9.0-M2"
+  val tsecV         = "0.0.1-M4"
 
   Seq(
-    "org.http4s"    %% "http4s-dsl"          % http4sVersion,
-    "org.http4s"    %% "http4s-blaze-server" % http4sVersion,
-    "org.typelevel" %% "cats-core"           % catsVersion,
-    "org.typelevel" %% "cats-effect"         % "0.5",
-    "co.fs2"        %% "fs2-core"            % "0.10.0-M8",
-    "io.circe"      %% "circe-core"          % circeVersion,
-    "io.circe"      %% "circe-generic"       % circeVersion,
-    "io.circe"      %% "circe-parser"        % circeVersion
+    "org.http4s"         %% "http4s-dsl"          % http4sVersion,
+    "org.http4s"         %% "http4s-blaze-server" % http4sVersion,
+    "org.http4s"         %% "http4s-circe"        % http4sVersion,
+    "org.typelevel"      %% "cats-core"           % catsVersion,
+    "org.typelevel"      %% "cats-effect"         % "0.5",
+    "co.fs2"             %% "fs2-core"            % "0.10.0-M8",
+    "io.circe"           %% "circe-core"          % circeVersion,
+    "io.circe"           %% "circe-generic"       % circeVersion,
+    "io.circe"           %% "circe-parser"        % circeVersion,
+    "io.github.jmcardon" %% "tsec-http4s"         % tsecV
   )
 }
 
@@ -40,6 +43,7 @@ lazy val seed = crossProject
     version := "0.1-SNAPSHOT"
   )
   .jvmSettings(
+    resolvers += "jmcardon at bintray" at "https://dl.bintray.com/jmcardon/tsec",
     resolvers += Resolver.sonatypeRepo("snapshots"),
     scalacOptions := jvmOps,
     libraryDependencies := jvmDeps
