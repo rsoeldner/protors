@@ -5,7 +5,9 @@ import japgolly.scalajs.react.extra.router.RouterCtl
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.html_<^._
 import protors.Pages.Page
-import protors.User
+import protors.components.LoginComponent.Logout
+import protors.{AppCircuit, User}
+import diode.react.ReactPot._
 
 object NavBar {
 
@@ -14,7 +16,6 @@ object NavBar {
   lazy val compontent = ScalaComponent
     .builder[Props]("NavBar")
     .render_P { props =>
-      val user = props.user()
       val router = props.router
 
       <.nav(
@@ -22,13 +23,14 @@ object NavBar {
         <.a(^.cls := "navbar-brand", "OlaHola!"),
         <.div(^.cls := "collapse navbar-collapse",
               <.ul(^.cls := "navbar-nav",
-                   <.li(^.cls := "nav-item active", <.a(^.cls := "nav-link",^.href:="#home", "Home")))),
+                <.li(^.cls := "nav-item active", <.a(^.cls := "nav-link",^.href:="#home", "Home"))
+              )),
         <.form(
           ^.cls := "form-inline",
-          if (user.isLogged)
-            <.a(^.cls := "btn btn-outline-secondary","logout")
+          if (props.user().isLogged)
+            <.a(^.cls := "btn btn-outline-secondary","logout", ^.onClick --> props.user.dispatchCB(Logout))
           else
-            <.a(^.cls := "btn btn-outline-success",^.href := "#login", "login")
+            <.div
         )
       )
     }
